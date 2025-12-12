@@ -18,38 +18,38 @@
     </form>
 </div>
 
-<div class="dashboard-card" style="border-top: 5px solid #ffa500;">
+<div class="dashboard-card" style="margin-top: 30px;">
     <h2>Strumenti Sviluppo & Dati</h2>
 
     <div style="margin-bottom: 30px;">
         <h3>Popolamento Dati</h3>
-        <p>Aggiungi 10 allievi di prova al database.</p>
+        <p>Aggiungi 10 allievi con nomi verosimili al database.</p>
         <form action="/settings/seed" method="POST">
-            <button type="submit" class="cta-button" style="background-color: #2196F3;">Popola Database (Seed)</button>
+            <button type="submit" class="cta-button">Popola Database (Seed)</button>
         </form>
     </div>
 </div>
 
-<div class="dashboard-card" style="border-top: 5px solid red;">
-    <h2 style="color: red;">Zona Pericolosa: Gestione Database</h2>
+<div class="dashboard-card" style="margin-top: 30px; border: 1px solid #eee;">
+    <h2>Gestione Database</h2>
 
     <div style="margin-bottom: 30px;">
-        <h3>Elimina Tabelle Singole</h3>
-        <table style="width: 100%; text-align: left; margin-top: 10px;">
+        <h3>Tabelle Database</h3>
+        <table style="width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse;">
             <?php if (!empty($tables)): ?>
                 <?php foreach ($tables as $table): ?>
-                    <tr>
-                        <td style="padding: 5px;"><?php echo $table; ?></td>
-                        <td>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 10px;"><?php echo $table; ?></td>
+                        <td style="text-align: right;">
                             <?php if ($table !== 'users'): ?>
                                 <form action="/settings/drop_table" method="POST" style="display:inline;"
                                     onsubmit="return confirm('Sei sicuro di voler ELIMINARE la tabella <?php echo $table; ?>? I dati andranno persi.');">
                                     <input type="hidden" name="table" value="<?php echo $table; ?>">
                                     <button type="submit"
-                                        style="background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Elimina</button>
+                                        style="background: transparent; color: #666; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.9em;">Elimina</button>
                                 </form>
                             <?php else: ?>
-                                <span style="color: #999; font-size: 0.8em;">(Protetto)</span>
+                                <span style="color: #999; font-size: 0.8em; padding: 5px 10px;">(Protetto)</span>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -60,14 +60,14 @@
         </table>
     </div>
 
-    <div>
-        <h3>Reset Totale</h3>
-        <p>Attenzione: Questa azione cancellerà TUTTE le tabelle e i dati.</p>
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+        <h3 style="color: #666;">Zona Pericolosa</h3>
+        <p style="font-size: 0.9em; color: #666;">Questa azione cancellerà tutto il contenuto del database.</p>
         <form action="/settings/nuke" method="POST"
             onsubmit="return confirm('SEI SICURO? QUESTA AZIONE CANCELLERÀ TUTTO IL DATABASE E NON È REVERSIBILE!');">
             <button type="submit"
-                style="background: darkred; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; font-weight: bold;">ELIMINA
-                TUTTO IL DATABASE</button>
+                style="background: #f8f8f8; color: #d32f2f; border: 1px solid #ddd; padding: 8px 15px; cursor: pointer; border-radius: 4px;">Elimina
+                Tutto il Database</button>
         </form>
     </div>
 </div>

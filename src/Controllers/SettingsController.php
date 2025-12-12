@@ -39,15 +39,24 @@ class SettingsController
 
     public function seedDatabase()
     {
-        // Seeding 10 dummy students
-        for ($i = 1; $i <= 10; $i++) {
-            $this->user->name = "Allievo Demo $i";
-            $this->user->email = "allievo$i@demo.com";
+        $names = ['Marco', 'Giulia', 'Alessandro', 'Francesca', 'Luca', 'Sofia', 'Matteo', 'Chiara', 'Davide', 'Sara', 'Simone', 'Valentina', 'Lorenzo', 'Alice', 'Andrea'];
+        $surnames = ['Rossi', 'Bianchi', 'Ferrari', 'Esposito', 'Ricci', 'Marino', 'Greco', 'Bruno', 'Gallo', 'Conti', 'De Luca', 'Mancini', 'Rizzo', 'Lombardi'];
+
+        // Seeding 10 realistic students
+        for ($i = 0; $i < 10; $i++) {
+            $firstName = $names[array_rand($names)];
+            $lastName = $surnames[array_rand($surnames)];
+
+            $this->user->name = "$firstName $lastName";
+            // Create a cleaner email, maybe handle duplicates roughly by adding random number if needed, 
+            // but for 10 records collision is rare enough or fine to fail. 
+            // Adding rand to ensure uniqueness for UNIQUE constraint on email.
+            $this->user->email = strtolower($firstName . "." . $lastName . rand(10, 99) . "@example.com");
             $this->user->password = "password123";
             $this->user->role = "student";
             $this->user->create();
         }
-        header("Location: /settings?success=Database popolato con 10 allievi");
+        header("Location: /settings?success=Database popolato con 10 nuovi allievi");
     }
 
     public function dropTable()
