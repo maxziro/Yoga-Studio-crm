@@ -38,4 +38,32 @@ class Database
 
         return $this->conn;
     }
+
+    public function checkInstallation()
+    {
+        if ($this->conn === null) {
+            $this->getConnection();
+        }
+        try {
+            $result = $this->conn->query("SHOW TABLES LIKE 'users'");
+            return $result->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function install()
+    {
+        if ($this->conn === null) {
+            $this->getConnection();
+        }
+        $sql = file_get_contents(__DIR__ . '/../database/init.sql');
+        try {
+            $this->conn->exec($sql);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Installation error: " . $e->getMessage());
+            return false;
+        }
+    }
 }

@@ -24,6 +24,18 @@ require_once __DIR__ . '/../src/Controllers/AuthController.php';
 // Istanza Database e Controller
 $database = new Database();
 $db = $database->getConnection();
+
+// Auto-Installation Check
+if (!$database->checkInstallation()) {
+    if ($database->install()) {
+        echo "<h1>Installazione completata con successo!</h1><p>Database inizializzato. <a href='/login'>Accedi qui</a>.</p>";
+        exit;
+    } else {
+        echo "<h1>Errore durante l'installazione.</h1><p>Controlla i log o la connessione al database.</p>";
+        exit;
+    }
+}
+
 $authController = new AuthController($db);
 
 // Routing

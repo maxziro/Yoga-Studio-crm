@@ -41,9 +41,10 @@ class User
 
     public function emailExists()
     {
-        $query = "SELECT id, name, password, role FROM " . $this->table_name . " WHERE email = ? LIMIT 0,1";
+        $query = "SELECT id, name, password, role FROM " . $this->table_name . " WHERE email = :email OR name = :name LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->email);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':name', $this->email); // Reusing email property for input (which can be name or email)
         $stmt->execute();
         $num = $stmt->rowCount();
 
