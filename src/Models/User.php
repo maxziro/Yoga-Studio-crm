@@ -59,6 +59,23 @@ class User
         return false;
     }
 
+    public function updatePassword($newPassword)
+    {
+        $query = "UPDATE " . $this->table_name . " SET password = :password WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        $stmt->bindParam(':password', $password_hash);
+        $stmt->bindParam(':id', $this->id);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
     public function getStudents()
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE role = 'student' ORDER BY created_at DESC";

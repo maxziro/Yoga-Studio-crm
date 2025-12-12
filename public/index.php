@@ -27,6 +27,7 @@ session_start();
 // Autoloading classi (semplificato)
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/StudentController.php';
+require_once __DIR__ . '/../src/Controllers/SettingsController.php';
 
 // Istanza Database e Controller
 $database = new Database();
@@ -45,6 +46,7 @@ if (!$database->checkInstallation()) {
 
 $authController = new AuthController($db);
 $studentController = new StudentController($db);
+$settingsController = new SettingsController($database); // Pass database instance, not connection
 
 // Simple Router
 switch ($path) {
@@ -119,12 +121,39 @@ switch ($path) {
             header("Location: /login");
             exit;
         }
-        $view = 'settings/index.php'; // Directly render via dashboard layout logic
-        require __DIR__ . '/../src/Views/dashboard.php';
+        $settingsController->index();
+        break;
+    case '/settings/update_password':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $settingsController->updatePassword();
+        break;
+    case '/settings/seed':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $settingsController->seedDatabase();
+        break;
+    case '/settings/drop_table':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $settingsController->dropTable();
+        break;
+    case '/settings/nuke':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $settingsController->nukeDatabase();
         break;
 
     default:
         http_response_code(404);
-        require_once __DIR__ . '/../src/Views/404.php';
+        echo "404 Not Found";
         break;
 }

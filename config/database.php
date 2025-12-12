@@ -71,7 +71,47 @@ class Database
             $this->conn->exec($sql);
             return true;
         } catch (PDOException $e) {
-            error_log("Installation error: " . $e->getMessage());
+        }
+    }
+
+    public function getTables()
+    {
+        if ($this->conn === null)
+            $this->getConnection();
+        $stmt = $this->conn->query("SHOW TABLES");
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function dropTable($tableName)
+    {
+        if ($this->conn === null)
+            $this->getConnection();
+        // Basic validation: table name should be alphanumeric/underscore
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $tableName))
+            return false;
+
+        try {
+            $this->conn->exec("DROP TABLE IF EXISTS `$tableName`");
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function dropAllTables()
+    {
+        if ($this->conn === null)
+            $this->getConnection();
+
+        try {
+            $this->conn->exec("SET FOREIGN_KEY_CHECKS = 0");
+            $tables = $this->getTables();
+            foreach ($tables as $table) {
+                $this->conn->exec("DROP TABLE IF EXISTS `$table`");
+            }
+            $this->conn->exec("SET FOREIGN_KEY_CHECKS = 1");
+            return true;
+        } catch (PDOException $e) {
             return false;
         }
     }
