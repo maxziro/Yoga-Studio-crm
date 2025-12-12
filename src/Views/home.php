@@ -34,7 +34,8 @@
 
     <footer class="main-footer">
         <div class="container">
-            <p>&copy; <?php echo date("Y"); ?> Parsifal Yoga Studio Vicenza</p>
+            <p>&copy; <?php echo date("Y"); ?> Parsifal Yoga Studio Vicenza | <a href="/dashboard"
+                    style="color: var(--text-light); text-decoration: none; font-size: 0.8em;">Admin CRM</a></p>
         </div>
     </footer>
 </body>

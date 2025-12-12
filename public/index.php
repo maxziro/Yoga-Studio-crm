@@ -22,6 +22,10 @@ switch ($path) {
         require_once __DIR__ . '/../src/Views/home.php';
         break;
 
+    case $base_path . 'dashboard':
+        require_once __DIR__ . '/../src/Views/dashboard.php';
+        break;
+
     default:
         http_response_code(404);
         require_once __DIR__ . '/../src/Views/404.php';
