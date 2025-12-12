@@ -15,6 +15,18 @@ $base_path = '/'; // Se l'app è in una sottocartella, aggiustare qui. Es: '/yog
 $path = parse_url($request_uri, PHP_URL_PATH);
 
 // Semplice gestione delle rotte
+// Avvio sessione
+session_start();
+
+// Autoloading classi (semplificato)
+require_once __DIR__ . '/../src/Controllers/AuthController.php';
+
+// Istanza Database e Controller
+$database = new Database();
+$db = $database->getConnection();
+$authController = new AuthController($db);
+
+// Routing
 switch ($path) {
     case $base_path:
     case $base_path . 'index.php':
@@ -22,7 +34,27 @@ switch ($path) {
         require_once __DIR__ . '/../src/Views/home.php';
         break;
 
+    case $base_path . 'login':
+        $authController->login();
+        break;
+
+    case $base_path . 'login_post':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $authController->loginPost();
+        } else {
+            header("Location: /login");
+        }
+        break;
+
+    case $base_path . 'logout':
+        $authController->logout();
+        break;
+
     case $base_path . 'dashboard':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
         require_once __DIR__ . '/../src/Views/dashboard.php';
         break;
 

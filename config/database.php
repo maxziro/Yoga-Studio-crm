@@ -10,12 +10,15 @@ class Database
 
     public function __construct()
     {
-        // Usa variabili d'ambiente o fallback a valori locali per sviluppo (se necessario)
-        // In produzione l'ideale è usare getenv o $_ENV popolati dal server/hosting
-        $this->host = getenv('DB_HOST') ?: 'localhost';
-        $this->db_name = getenv('DB_NAME') ?: 'yoga_studio';
-        $this->username = getenv('DB_USER') ?: 'root';
-        $this->password = getenv('DB_PASS') ?: '';
+        $config = [];
+        if (file_exists(__DIR__ . '/config.php')) {
+            $config = require __DIR__ . '/config.php';
+        }
+
+        $this->host = $config['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
+        $this->db_name = $config['DB_NAME'] ?? getenv('DB_NAME') ?: 'yoga_studio';
+        $this->username = $config['DB_USER'] ?? getenv('DB_USER') ?: 'root';
+        $this->password = $config['DB_PASS'] ?? getenv('DB_PASS') ?: '';
     }
 
     public function getConnection()
