@@ -18,6 +18,10 @@ jobs:
       run: sudo apt-get install -y lftp
 
     - name: Sync files via LFTP
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER_STAGING }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME_STAGING }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_STAGING }}
       run: |
         lftp -c "
         debug 5;
@@ -26,7 +30,7 @@ jobs:
         set ftp:ssl-auth TLS;
         set ftp:ssl-protect-data true;
         set ssl:verify-certificate no;
-        open -u ${{ secrets.FTP_USERNAME_STAGING }},${{ secrets.FTP_PASSWORD_STAGING }} -p 21 ${{ secrets.FTP_SERVER_STAGING }};
+        open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" -p 21 \"$FTP_SERVER\";
         mirror -R -v --parallel=2 --exclude-glob .git* --exclude-glob .git/ --exclude-glob node_modules/ --exclude-glob .github/ ./ /;
         quit
         "
