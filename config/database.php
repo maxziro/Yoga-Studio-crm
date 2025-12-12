@@ -44,6 +44,9 @@ class Database
         if ($this->conn === null) {
             $this->getConnection();
         }
+        if ($this->conn === null) {
+            return false;
+        }
         try {
             $result = $this->conn->query("SHOW TABLES LIKE 'users'");
             return $result->rowCount() > 0;
@@ -56,6 +59,9 @@ class Database
     {
         if ($this->conn === null) {
             $this->getConnection();
+        }
+        if ($this->conn === null) {
+            return false;
         }
         $sql = file_get_contents(__DIR__ . '/../database/init.sql');
         try {
