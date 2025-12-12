@@ -14,16 +14,19 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v4
     
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.FTP_SERVER_STAGING }}
-        username: ${{ secrets.FTP_USERNAME_STAGING }}
-        password: ${{ secrets.FTP_PASSWORD_STAGING }}
-        # Escludi file non necessari in produzione/staging
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          README.md
-          .github/**
+    - name: Install LFTP
+      run: sudo apt-get install -y lftp
+
+    - name: Sync files via LFTP
+      run: |
+        lftp -c "
+        debug 5;
+        set ftp:ssl-allow yes;
+        set ftp:ssl-force true;
+        set ftp:ssl-auth TLS;
+        set ftp:ssl-protect-data true;
+        set ssl:verify-certificate no;
+        open -u ${{ secrets.FTP_USERNAME_STAGING }},${{ secrets.FTP_PASSWORD_STAGING }} -p 21 ${{ secrets.FTP_SERVER_STAGING }};
+        mirror -R -v --parallel=2 --exclude-glob .git* --exclude-glob .git/ --exclude-glob node_modules/ --exclude-glob .github/ ./ /;
+        quit
+        "
