@@ -2,7 +2,13 @@
 // Visualizzazione errori in sviluppo; da disabilitare in produzione
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
+ini_set('default_socket_timeout', 5); // Timeout for all socket based streams
 error_reporting(E_ALL);
+
+// Force output flushing
+if (ob_get_level())
+    ob_end_clean();
+ob_implicit_flush(true);
 
 // Autoloading manuale (o composer se aggiunto successivamente)
 require_once __DIR__ . '/../config/database.php';
