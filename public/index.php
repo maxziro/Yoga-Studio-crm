@@ -26,6 +26,7 @@ session_start();
 
 // Autoloading classi (semplificato)
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
+require_once __DIR__ . '/../src/Controllers/StudentController.php';
 
 // Istanza Database e Controller
 $database = new Database();
@@ -43,37 +44,83 @@ if (!$database->checkInstallation()) {
 }
 
 $authController = new AuthController($db);
+$studentController = new StudentController($db);
 
-// Routing
+// Simple Router
 switch ($path) {
-    case $base_path:
-    case $base_path . 'index.php':
-    case $base_path . 'home':
-        require_once __DIR__ . '/../src/Views/home.php';
+    case '/':
+        require __DIR__ . '/../src/Views/home.php';
         break;
-
-    case $base_path . 'login':
+    case '/login':
         $authController->login();
         break;
-
-    case $base_path . 'login_post':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $authController->loginPost();
-        } else {
-            header("Location: /login");
-        }
+    case '/login_post':
+        $authController->loginPost();
         break;
-
-    case $base_path . 'logout':
+    case '/logout':
         $authController->logout();
         break;
-
-    case $base_path . 'dashboard':
+    case '/dashboard':
+        // Auth check is done inside the view or controller, but here we can enforce it too
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             exit;
         }
-        require_once __DIR__ . '/../src/Views/dashboard.php';
+        require __DIR__ . '/../src/Views/dashboard.php';
+        break;
+
+    // Student Routes
+    case '/students':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->index();
+        break;
+    case '/students/create':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->create();
+        break;
+    case '/students/store':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->store();
+        break;
+    case '/students/edit':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->edit();
+        break;
+    case '/students/update':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->update();
+        break;
+    case '/students/delete':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->delete();
+        break;
+
+    // Settings Route
+    case '/settings':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $view = 'settings/index.php'; // Directly render via dashboard layout logic
+        require __DIR__ . '/../src/Views/dashboard.php';
         break;
 
     default:

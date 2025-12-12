@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,41 +13,52 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .dashboard-card {
             background: white;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
     <header class="main-header">
         <div class="container">
-            <h1 class="logo">Parsifal Yoga Studio <span style="font-size: 0.8em; color: var(--secondary-color);">| CRM</span></h1>
+            <h1 class="logo">Parsifal Yoga Studio <span style="font-size: 0.8em; color: var(--secondary-color);">|
+                    CRM</span></h1>
             <nav>
                 <ul>
                     <li><a href="/">Sito Pubblico</a></li>
-                    <li><a href="#" class="active">Dashboard</a></li>
-                    <li><a href="#">Studenti</a></li>
-                    <li><a href="#">Corsi</a></li>
+                    <li><a href="/dashboard" class="<?php echo (!isset($view)) ? 'active' : ''; ?>">Dashboard</a></li>
+                    <li><a href="/students" class="<?php echo (isset($view) && strpos($view, 'students') !== false) ? 'active' : ''; ?>">Allievi</a></li>
+                    <li><a href="/settings" class="<?php echo (isset($view) && strpos($view, 'settings') !== false) ? 'active' : ''; ?>">Impostazioni</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <div class="dashboard-container">
-        <div class="dashboard-card">
-            <h2>Benvenuto nel Backend</h2>
-            <p>Questa è l'area amministrativa (Accesso Libero per ora).</p>
-        </div>
+        <!-- Sidebar / Navigation is handled in Header for now, could be improved -->
 
-        <div class="dashboard-card">
-            <h3>Statistiche Veloci</h3>
-            <p>Iscritti: 0</p>
-            <p>Lezioni oggi: 0</p>
-        </div>
+        <?php if (isset($view) && file_exists(__DIR__ . '/' . $view)): ?>
+            <?php include __DIR__ . '/' . $view; ?>
+        <?php else: ?>
+            <!-- Default Dashboard Home -->
+            <div class="dashboard-card">
+                <h2>Benvenuto nel Backend</h2>
+                <p>Area amministrativa Parsifal Yoga Studio.</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Statistiche Veloci</h3>
+                <p>Iscritti: 0</p>
+                <p>Lezioni oggi: 0</p>
+            </div>
+        <?php endif; ?>
     </div>
 </body>
+
 </html>
