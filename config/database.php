@@ -115,4 +115,58 @@ class Database
             return false;
         }
     }
+    public function exportDatabase()
+    {
+        if ($this->conn === null)
+            $this->getConnection();
+
+        $tables = $this->getTables();
+        $sql = "-- Database Export\n-- Generated: " . date('Y-m-d H:i:s') . "\n\n";
+        $sql .= "SET FOREIGN_KEY_CHECKS=0;\n";
+
+        foreach ($tables as $table) {
+            // Structure
+            $row = $this->conn->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_NUM);
+            $sql .= "\n\n" . $row[1] . ";\n\n";
+
+            // Data
+            $rows = $this->conn->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_NUM);
+            foreach ($rows as $row) {
+                $sql .= "INSERT INTO `$table` VALUES(";
+                $values = [];
+                foreach ($row as $value) {
+                    if ($value === null) {
+                        $values[] = "NULL";
+                    } else {
+                        $values[] = $this->conn->quote($value);
+                    }
+                }
+                $sql .= implode(", ", $values);
+                $sql .= ");\n";
+            }
+        }
+
+        $sql .= "\nSET FOREIGN_KEY_CHECKS=1;\n";
+        return $sql;
+    }
+
+    public function importDatabase($sqlContent)
+    {
+        if ($this->conn === null)
+            $this->getConnection();
+
+        try {
+            // Disable foreign key checks for import
+            $this->conn->exec("SET FOREIGN_KEY_CHECKS=0");
+
+            // Multiple queries
+            $this->conn->exec($sqlContent);
+
+            $this->conn->exec("SET FOREIGN_KEY_CHECKS=1");
+            return true;
+        } catch (PDOException $e) {
+            error_log("Import Error: " . $e->getMessage());
+            return false;
+        }
+    }
 }

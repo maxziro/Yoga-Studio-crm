@@ -28,13 +28,34 @@
             <button type="submit" class="cta-button">Popola Database (Seed)</button>
         </form>
     </div>
-</div>
 
-<div class="dashboard-card" style="margin-top: 30px; border: 1px solid #eee;">
-    <h2>Gestione Database</h2>
+    <div style="margin-bottom: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+        <h3>Export & Import Completo</h3>
+        <p>Esporta o ripristina l'intero database (struttura e dati).</p>
 
-    <div style="margin-bottom: 30px;">
-        <h3>Tabelle Database</h3>
+        <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+            <div>
+                <h4>Esporta</h4>
+                <a href="/settings/export" class="cta-button"
+                    style="text-decoration: none; display: inline-block;">Scarica Backup SQL</a>
+            </div>
+
+            <div style="flex: 1; min-width: 300px;">
+                <h4>Importa</h4>
+                <form action="/settings/import" method="POST" enctype="multipart/form-data"
+                    onsubmit="return confirm('ATTENZIONE: Questa operazione sovrascriverà i dati esistenti. Sei sicuro?');">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="file" name="backup_file" accept=".sql" required
+                            style="border: 1px solid #ddd; padding: 5px;">
+                        <button type="submit" class="cta-button" style="background-color: #f39c12;">Ripristina</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+        <h3>Gestione Tabelle</h3>
         <table style="width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse;">
             <?php if (!empty($tables)): ?>
                 <?php foreach ($tables as $table): ?>
@@ -46,7 +67,7 @@
                                     onsubmit="return confirm('Sei sicuro di voler ELIMINARE la tabella <?php echo $table; ?>? I dati andranno persi.');">
                                     <input type="hidden" name="table" value="<?php echo $table; ?>">
                                     <button type="submit"
-                                        style="background: transparent; color: #666; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.9em;">Elimina</button>
+                                        style="background: transparent; color: #d32f2f; border: 1px solid #ddd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-size: 0.9em;">Elimina</button>
                                 </form>
                             <?php else: ?>
                                 <span style="color: #999; font-size: 0.8em; padding: 5px 10px;">(Protetto)</span>
@@ -61,12 +82,12 @@
     </div>
 
     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-        <h3 style="color: #666;">Zona Pericolosa</h3>
+        <h3 style="color: #d32f2f;">Zona Pericolosa</h3>
         <p style="font-size: 0.9em; color: #666;">Questa azione cancellerà tutto il contenuto del database.</p>
         <form action="/settings/nuke" method="POST"
             onsubmit="return confirm('SEI SICURO? QUESTA AZIONE CANCELLERÀ TUTTO IL DATABASE E NON È REVERSIBILE!');">
             <button type="submit"
-                style="background: #f8f8f8; color: #d32f2f; border: 1px solid #ddd; padding: 8px 15px; cursor: pointer; border-radius: 4px;">Elimina
+                style="background: #fee; color: #d32f2f; border: 1px solid #d32f2f; padding: 8px 15px; cursor: pointer; border-radius: 4px;">Elimina
                 Tutto il Database</button>
         </form>
     </div>

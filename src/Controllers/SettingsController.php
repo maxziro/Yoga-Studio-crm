@@ -79,4 +79,36 @@ class SettingsController
             header("Location: /settings?error=Errore durante drop all");
         }
     }
+    public function export()
+    {
+        $sql = $this->database->exportDatabase();
+        $filename = 'backup_' . date('Y-m-d_H-i-s') . '.sql';
+
+        header('Content-Type: application/sql');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . strlen($sql));
+        echo $sql;
+        exit;
+    }
+
+    public function import()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['backup_file'])) {
+            header("Location: /settings?error=Nessun file caricato");
+            exit;
+        }
+
+        $file = $_FILES['backup_file'];
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            header("Location: /settings?error=Errore caricamento file");
+            exit;
+        }
+
+        $sqlContent = file_get_contents($file['tmp_name']);
+        if ($this->database->importDatabase($sqlContent)) {
+            header("Location: /settings?success=Database ripristinato con successo");
+        } else {
+            header("Location: /settings?error=Errore durante il ripristino");
+        }
+    }
 }

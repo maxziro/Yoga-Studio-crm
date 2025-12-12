@@ -20,6 +20,16 @@ $base_path = '/'; // Se l'app è in una sottocartella, aggiustare qui. Es: '/yog
 // Rimuove query string
 $path = parse_url($request_uri, PHP_URL_PATH);
 
+// Fix per hosting che includono index.php nel path o non supportano rewrite
+$path = str_replace('/index.php', '', $path);
+if ($path === '' || $path === '/') {
+    $path = '/';
+    // Fallback: Check param ?route= (es. index.php?route=/login)
+    if (isset($_GET['route'])) {
+        $path = '/' . ltrim($_GET['route'], '/');
+    }
+}
+
 // Semplice gestione delle rotte
 // Avvio sessione
 session_start();
@@ -150,6 +160,20 @@ switch ($path) {
             exit;
         }
         $settingsController->nukeDatabase();
+        break;
+    case '/settings/export':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $settingsController->export();
+        break;
+    case '/settings/import':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $settingsController->import();
         break;
 
     default:
