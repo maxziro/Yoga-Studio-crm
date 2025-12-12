@@ -31,6 +31,7 @@ jobs:
         set ftp:ssl-protect-data true;
         set ssl:verify-certificate no;
         open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" -p 21 \"$FTP_SERVER\";
-        mirror -R -v --parallel=2 --exclude-glob .git* --exclude-glob .git/ --exclude-glob node_modules/ --exclude-glob .github/ ./ /;
+        ls -la;
+        # mirror -R -v --parallel=2 --exclude-glob .git* --exclude-glob .git/ --exclude-glob node_modules/ --exclude-glob .github/ ./ /;
         quit
         "
