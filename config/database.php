@@ -26,22 +26,14 @@ class Database
         $this->conn = null;
 
         try {
-            echo "Database: Preparing DSN for host " . $this->host . "...<br>";
-            flush();
             $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4";
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_TIMEOUT => 5, // 5 seconds timeout
             ];
-            echo "Database: Connecting to PDO...<br>";
-            flush();
             $this->conn = new PDO($dsn, $this->username, $this->password, $options);
-            echo "Database: Connection established.<br>";
-            flush();
         } catch (PDOException $exception) {
-            echo "Database: Connection FAILED: " . $exception->getMessage() . "<br>";
-            flush();
             // In produzione non mostrare l'errore completo all'utente
             error_log("Connection error: " . $exception->getMessage());
             echo "Errore di connessione al database.";
