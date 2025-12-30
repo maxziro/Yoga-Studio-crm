@@ -33,8 +33,15 @@
                 <ul>
                     <li><a href="/">Sito Pubblico</a></li>
                     <li><a href="/dashboard" class="<?php echo (!isset($view)) ? 'active' : ''; ?>">Dashboard</a></li>
-                    <li><a href="/students" class="<?php echo (isset($view) && strpos($view, 'students') !== false) ? 'active' : ''; ?>">Allievi</a></li>
-                    <li><a href="/settings" class="<?php echo (isset($view) && strpos($view, 'settings') !== false) ? 'active' : ''; ?>">Impostazioni</a></li>
+                    <li><a href="/students"
+                            class="<?php echo (isset($view) && strpos($view, 'students') !== false) ? 'active' : ''; ?>">Allievi</a>
+                    </li>
+                    <li><a href="/courses"
+                            class="<?php echo (isset($view) && strpos($view, 'courses') !== false) ? 'active' : ''; ?>">Corsi</a>
+                    </li>
+                    <li><a href="/settings"
+                            class="<?php echo (isset($view) && strpos($view, 'settings') !== false) ? 'active' : ''; ?>">Impostazioni</a>
+                    </li>
                 </ul>
             </nav>
         </div>

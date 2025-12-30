@@ -37,6 +37,7 @@ session_start();
 // Autoloading classi (semplificato)
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/StudentController.php';
+require_once __DIR__ . '/../src/Controllers/CourseController.php';
 require_once __DIR__ . '/../src/Controllers/SettingsController.php';
 
 // Istanza Database e Controller
@@ -56,6 +57,7 @@ if (!$database->checkInstallation()) {
 
 $authController = new AuthController($db);
 $studentController = new StudentController($db);
+$courseController = new CourseController($db);
 $settingsController = new SettingsController($database); // Pass database instance, not connection
 
 // Simple Router
@@ -123,6 +125,50 @@ switch ($path) {
             exit;
         }
         $studentController->delete();
+        break;
+
+    // Course Routes
+    case '/courses':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $courseController->index();
+        break;
+    case '/courses/create':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $courseController->create();
+        break;
+    case '/courses/store':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $courseController->store();
+        break;
+    case '/courses/edit':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $courseController->edit();
+        break;
+    case '/courses/update':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $courseController->update();
+        break;
+    case '/courses/delete':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $courseController->delete();
         break;
 
     // Settings Route
