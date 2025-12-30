@@ -39,6 +39,12 @@
                     <li><a href="/courses"
                             class="<?php echo (isset($view) && strpos($view, 'courses') !== false) ? 'active' : ''; ?>">Corsi</a>
                     </li>
+                    <li><a href="/subscription-types"
+                            class="<?php echo (isset($view) && strpos($view, 'subscription_types') !== false) ? 'active' : ''; ?>">Abbonamenti</a>
+                    </li>
+                    <li><a href="/payments"
+                            class="<?php echo (isset($view) && strpos($view, 'payments') !== false) ? 'active' : ''; ?>">Entrate</a>
+                    </li>
                     <li><a href="/settings"
                             class="<?php echo (isset($view) && strpos($view, 'settings') !== false) ? 'active' : ''; ?>">Impostazioni</a>
                     </li>

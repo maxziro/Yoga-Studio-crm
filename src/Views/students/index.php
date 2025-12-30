@@ -22,6 +22,8 @@
                         <td style="padding: 10px;"><?php echo htmlspecialchars($student['email']); ?></td>
                         <td style="padding: 10px;"><?php echo htmlspecialchars($student['role']); ?></td>
                         <td style="padding: 10px;">
+                            <a href="/students/subscriptions?id=<?php echo $student['id']; ?>"
+                                style="color: var(--secondary-color); text-decoration: none; margin-right: 10px;">Abbonamenti</a>
                             <a href="/students/edit?id=<?php echo $student['id']; ?>"
                                 style="color: var(--secondary-color); text-decoration: none; margin-right: 10px;">Modifica</a>
                             <a href="/students/delete?id=<?php echo $student['id']; ?>"

@@ -38,6 +38,8 @@ session_start();
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/StudentController.php';
 require_once __DIR__ . '/../src/Controllers/CourseController.php';
+require_once __DIR__ . '/../src/Controllers/SubscriptionTypeController.php';
+require_once __DIR__ . '/../src/Controllers/PaymentController.php';
 require_once __DIR__ . '/../src/Controllers/SettingsController.php';
 
 // Istanza Database e Controller
@@ -58,6 +60,8 @@ if (!$database->checkInstallation()) {
 $authController = new AuthController($db);
 $studentController = new StudentController($db);
 $courseController = new CourseController($db);
+$subscriptionTypeController = new SubscriptionTypeController($db);
+$paymentController = new PaymentController($db);
 $settingsController = new SettingsController($database); // Pass database instance, not connection
 
 // Simple Router
@@ -169,6 +173,117 @@ switch ($path) {
             exit;
         }
         $courseController->delete();
+        break;
+
+    // Student Subscription Routes
+    case '/students/subscriptions':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->subscriptions();
+        break;
+    case '/students/assign-subscription':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->assignSubscription();
+        break;
+    case '/students/store-subscription':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $studentController->storeSubscription();
+        break;
+
+    // Subscription Types Routes
+    case '/subscription-types':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $subscriptionTypeController->index();
+        break;
+    case '/subscription-types/create':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $subscriptionTypeController->create();
+        break;
+    case '/subscription-types/store':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $subscriptionTypeController->store();
+        break;
+    case '/subscription-types/edit':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $subscriptionTypeController->edit();
+        break;
+    case '/subscription-types/update':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $subscriptionTypeController->update();
+        break;
+    case '/subscription-types/delete':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $subscriptionTypeController->delete();
+        break;
+
+    // Payment Routes
+    case '/payments':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $paymentController->index();
+        break;
+    case '/payments/create':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $paymentController->create();
+        break;
+    case '/payments/store':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $paymentController->store();
+        break;
+    case '/payments/edit':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $paymentController->edit();
+        break;
+    case '/payments/update':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $paymentController->update();
+        break;
+    case '/payments/delete':
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit;
+        }
+        $paymentController->delete();
         break;
 
     // Settings Route
